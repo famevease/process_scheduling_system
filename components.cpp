@@ -9,7 +9,7 @@ void addProcessToQueue(const Process& process, std::vector<Queue>& queues) {
     }
 }
 
-void sortProcessesBySJF(std::vector<Process>& processes) {
+void sortProcessesBySJF(std::vector<Process>& processes) { //q2 q3
     int n = processes.size();
     if (n <= 1) {
         return;
@@ -28,7 +28,7 @@ void sortProcessesBySJF(std::vector<Process>& processes) {
     }
 }
 
-void sortProcessesBySRTN(std::vector<Process>& processes) {
+void sortProcessesBySRTN(std::vector<Process>& processes) { //q1
     int n = processes.size();
     for (int i = 0; i < n - 1; i++) {
         for (int j = i; j < n - i - 1; j++) {
