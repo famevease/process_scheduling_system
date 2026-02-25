@@ -3,23 +3,30 @@
 #include <string>
 #include <vector>
 
+
 struct Process{
-    int pid;
+    int pid; //p1,p2,...
     int arrivalTime;
-    int burstTime;
+    int burstTime; //tg can de hoan thanh
     int queueId;
-    int remainingTime = burstTime;
-    int waitingTime = 0;
-    int turnAroundTime = 0;
-    int completionTime = 0;
+
+    int remainingTime = burstTime; //tg con lai de chay xong ct
+    int waitingTime = 0; //tg nam trong hang cho
+    int turnAroundTime = 0;     //tu luc vao den luc xong (complete - arrival)
+    int completionTime = 0; 
 };
 
 struct Queue{
     int qid;
     int timeSlice;
-    std::string policy;
+    std::string policy; // sjf & srtn
     std::vector<Process> processes = {};
-    Process* currentProcess = processes.empty() ? nullptr : &processes[0];
+
+    //Tra ve dia chi cua chuong trinh dau tien trong hang doi
+    Process* getCurrentProcess() {
+        if (processes.empty()) return nullptr;
+        return &processes[0];
+    }
 };
 
 void addProcessToQueue(const Process& process, std::vector<Queue>& queues);
