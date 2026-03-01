@@ -1,15 +1,5 @@
 #include "components.h"
 
-
-void addProcessToQueue(const Process& process, std::vector<Queue>& queues) {
-    for (auto& queue : queues) {
-        if (queue.qid == process.queueId) {
-            queue.processes.push_back(process);
-            return;
-        }
-    }
-}
-
 void sortProcessesBySJF(std::vector<Process>& processes) { //q2 q3
     int n = processes.size();
     if (n <= 1) {
@@ -41,6 +31,15 @@ void sortProcessesBySRTN(std::vector<Process>& processes) { //q1
                     std::swap(processes[i], processes[j]);
                 }
             }
+        }
+    }
+}
+
+void addProcessToQueue(const Process& process, std::vector<Queue>& queues) {
+    for (auto& queue : queues) {
+        if (queue.qid == process.queueId) {
+            queue.processes.push_back(process);
+            return;
         }
     }
 }
