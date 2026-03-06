@@ -14,6 +14,8 @@ struct Process{
     int waitingTime = 0; //tg nam trong hang cho
     int turnAroundTime = 0;     //tu luc vao den luc xong (complete - arrival)
     int completionTime = 0; 
+
+    bool isLoaded = false;
 };
 
 struct Queue{

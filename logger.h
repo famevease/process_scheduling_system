@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <iostream>
+
 #include "components.h"
 
 struct Log
@@ -18,6 +20,8 @@ struct Logger
     std::vector<Log> Logs;
     
     void addLog(int currentTime,int pid,int qid);
+    void printOutput();
+
 };
 
 

@@ -8,4 +8,6 @@
 
 void runSimulation(std::vector<Queue>& queues, std::vector<Process>& allProcesses);
 bool QueuesIsEmpty(std::vector<Queue>& queues);
+void loadNewProcesses(int curTime, std::vector<Queue>& queues, std::vector<Process>& Processes);
+
 #endif
