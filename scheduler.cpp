@@ -89,8 +89,11 @@ void runSimulation(std::vector<Queue>& queues, std::vector<Process>& allProcesse
         //neu thoi gian cua process = 0 tuong duong voi done process do va se lam process moi
         if (p.remainingTime == 0)
         {
+            p.completionTime = curTime;
+            p.turnAroundTime = p.completionTime - p.arrivalTime;
+            p.waitingTime = p.turnAroundTime - p.burstTime;
             countProcess++;
-            removeCompletedProcesses(curQ.processes);
+            removeCompletedProcesses(curQ);
             isBusy = false; //Dat thanh false SJF co the qua Pid ke tiep
         }
         

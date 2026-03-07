@@ -6,8 +6,6 @@
 #include <fstream>
 #include <iostream>
 
-#include "components.h"
-
 struct Log
 {
     int start;

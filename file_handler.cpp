@@ -24,3 +24,29 @@ void readFile(const std::string& filename, std::vector<Queue>& queues, std::vect
     }
     file.close();
 }
+
+void writeOutput(const std::string& filename, const Logger& logger, const std::vector<Process>& processes) {
+    std::ofstream file(filename);
+    if (!file.is_open()) {
+        throw std::runtime_error("Could not open file: " + filename);
+    }
+
+    file << "================== CPU SCHEDULING DIAGRAM ==================\n";
+    file << "\n[Start - End]\tQueue\tProcess\n";
+    file << "--------------------------------------------------------------\n";
+    for (const auto& log : logger.Logs) {
+        file << "[" << log.start << " - " << log.end << "]\tQ" << log.qid << "\tP" << log.pid << "\n";
+    }
+    file << "\n================ PROCESS STATISTICS ================\n";
+    file << "\nProcess\tArrival\tBurst\tCompletion\tTurnaround\tWaiting\n";
+    file << "----------------------------------------------------------------------------------------------------------------------------\n";
+    for (const auto& process : processes) {
+        file << "P" << process.pid << "\t" << process.arrivalTime << "\t" << process.burstTime << "\t" 
+             << process.completionTime << "\t\t" << process.turnAroundTime << "\t\t" << process.waitingTime << "\n";
+    }
+    file << "----------------------------------------------------------------------------------------------------------------------------\n";
+    file << "Average Turnaround Time: " << averageTurnAroundTime(processes) << "\n";
+    file << "Average Waiting Time: " << averageWaitingTime(processes) << "\n";
+    file << "\n====================================================";
+    file.close();
+}

@@ -2,6 +2,7 @@
 #define components_h
 #include <string>
 #include <vector>
+#include <algorithm>
 
 
 struct Process{
@@ -34,5 +35,8 @@ struct Queue{
 void addProcessToQueue(const Process& process, std::vector<Queue>& queues);
 void sortProcessesBySJF(std::vector<Process>& processes);
 void sortProcessesBySRTN(std::vector<Process>& processes);
-void removeCompletedProcesses(std::vector<Process>& processes);
+void removeCompletedProcesses(Queue& queue);
+float averageWaitingTime(const std::vector<Process>& processes);
+float averageTurnAroundTime(const std::vector<Process>& processes);
+
 #endif

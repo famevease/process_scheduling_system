@@ -8,5 +8,6 @@
 #include "logger.h"
 
 void readFile(const std::string& filename, std::vector<Queue>& queues, std::vector<Process>& processes);
+void writeOutput(const std::string& filename, const Logger& logger, const std::vector<Process>& processes);
 
 #endif

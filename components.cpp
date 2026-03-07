@@ -44,7 +44,23 @@ void addProcessToQueue(const Process& process, std::vector<Queue>& queues) {
     }
 }
 
-void removeProcesses(std::vector<Process>& processes) {
-    processes.erase(processes.begin());
+void removeCompletedProcesses(Queue& queue) {
+    queue.processes.erase(queue.processes.begin());
+}
+     
+
+float averageWaitingTime(const std::vector<Process>& processes) {
+    int totalWaitingTime = 0;
+    for (const auto& process : processes) {
+        totalWaitingTime += process.waitingTime;
+    }
+    return static_cast<float>(totalWaitingTime) / processes.size();
 }
 
+float averageTurnAroundTime(const std::vector<Process>& processes) {
+    int totalTurnAroundTime = 0;
+    for (const auto& process : processes) {
+        totalTurnAroundTime += process.turnAroundTime;
+    }
+    return static_cast<float>(totalTurnAroundTime) / processes.size();
+}
