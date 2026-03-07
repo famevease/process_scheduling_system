@@ -8,7 +8,7 @@ bool AllQueuesEmpty(std::vector<Queue>& queues){
     return true;
 }
 
-void loadNewProcesses(int curTime, std::vector<Queue>& queues, std::vector<Process>& Processes){
+void loadNewProcesses(const int& curTime, std::vector<Queue>& queues, std::vector<Process>& Processes){
     for (auto &i : Processes){
             if (i.arrivalTime == curTime && !i.isLoaded)
             {
@@ -19,7 +19,7 @@ void loadNewProcesses(int curTime, std::vector<Queue>& queues, std::vector<Proce
         }
 }
 
-void runSimulation(std::vector<Queue>& queues, std::vector<Process>& allProcesses,Logger& logs){
+void runSimulation(std::vector<Queue>& queues, std::vector<Process>& allProcesses, Logger& logs){
     //Dung chay khi so luong process da hoan thanh = total
     int countProcess = 0;
     int curTime = 0;
@@ -93,6 +93,7 @@ void runSimulation(std::vector<Queue>& queues, std::vector<Process>& allProcesse
             p.turnAroundTime = p.completionTime - p.arrivalTime;
             p.waitingTime = p.turnAroundTime - p.burstTime;
             countProcess++;
+            allProcesses[p.pid-1] = p; //Cap nhat lai process da hoan thanh vao allProcesses de tinh toan sau nay
             removeCompletedProcesses(curQ);
             isBusy = false; //Dat thanh false SJF co the qua Pid ke tiep
         }
