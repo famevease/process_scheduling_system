@@ -8,15 +8,14 @@ bool AllQueuesEmpty(std::vector<Queue>& queues){
     return true;
 }
 
-void loadNewProcesses(const int& curTime, std::vector<Queue>& queues, std::vector<Process>& Processes){
-    for (auto &i : Processes){
-            if (i.arrivalTime == curTime && !i.isLoaded)
-            {
-                //Truy cap vao queue roi pushback processes vao dung vi tri queue
-                addProcessToQueue(i,queues);
-                i.isLoaded = true;
-            }
+void loadNewProcesses(const int& curTime, std::vector<Queue>& queues, std::vector<Process>& Processes) {
+    for (auto &i : Processes) {
+        if (i.arrivalTime == curTime && !i.isLoaded) {
+            //Truy cap vao queue roi pushback processes vao dung queue
+            addProcessToQueue(i, queues);
+            i.isLoaded = true;
         }
+    }
 }
 
 void runSimulation(std::vector<Queue>& queues, std::vector<Process>& allProcesses, Logger& logs){
@@ -39,21 +38,22 @@ void runSimulation(std::vector<Queue>& queues, std::vector<Process>& allProcesse
         //Kiem tra queue Qidx co empty k va con timeslice k de chuyen qidx
         if (queues[Qidx].processes.empty() || TSliceLeft <= 0 )
         {
-                //Kiem tra xem tat ca cac queues co empty k
-                if (AllQueuesEmpty(queues))
-                {
-                    //Neu he thong khong co tien trinh
+            // Kiem tra tien trinh o queue hien tai neu khong co thi di tim o cac queue khac
+            if (queues[Qidx].processes.empty()) {
+                //Check neu tat ca queue trong thi la tg ranh va tang curTime++
+                if (AllQueuesEmpty(queues)) {
                     curTime++;
-                    continue;
+                    continue; 
                 }
-
-            //Kiem tra tung queues xem co process nao trong hang doi k
-            do
-            {
-                Qidx = (Qidx + 1) % queues.size();
-
-            } while (queues[Qidx].processes.empty());
-            
+                //Tim queue gan nhat dang trong 
+                for (int i = 0; i < queues.size(); i++) {
+                    if (!queues[i].processes.empty()) {
+                        Qidx = i;
+                        break;
+                    }
+                }
+            }
+                
             //Neu da tim duoc queue Qidx thoa man thi lay timeslice cua cai do
             TSliceLeft = queues[Qidx].timeSlice;          
             //SJF: Neu ma dang dung nhung het timeslice thi dat lai thanh false de tiep tuc sort moi

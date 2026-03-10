@@ -6,7 +6,7 @@ void sortProcessesBySJF(std::vector<Process>& processes) { //q2 q3
         return;
     }
     for (int i = 0; i < n - 1; i++) {
-        for (int j = i + 1; j < n - i - 1; j++) {
+        for (int j = i + 1; j < n; j++) {
             if (processes[i].burstTime > processes[j].burstTime) {
                 std::swap(processes[i], processes[j]);
             }
@@ -22,7 +22,7 @@ void sortProcessesBySJF(std::vector<Process>& processes) { //q2 q3
 void sortProcessesBySRTN(std::vector<Process>& processes) { //q1
     int n = processes.size();
     for (int i = 0; i < n - 1; i++) {
-        for (int j = i + 1; j < n - i - 1; j++) {
+        for (int j = i + 1; j < n; j++) {
             if (processes[i].remainingTime > processes[j].remainingTime) {
                 std::swap(processes[i], processes[j]);
             }

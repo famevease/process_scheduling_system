@@ -20,6 +20,9 @@ void readFile(const std::string& filename, std::vector<Queue>& queues, std::vect
     while (file >> dummy) {
         Process process;
         file >> process.pid >> process.arrivalTime >> process.burstTime >> dummy >> process.queueId;
+        //Them dong nay boi vi khi khoi tao remainingtime dau tien (0 hoac rac) roi sau do moi cap nhap burst time nen no se khong
+        //tu dieu chinh remainingtime
+        process.remainingTime = process.burstTime;
         processes.push_back(process);
     }
     file.close();

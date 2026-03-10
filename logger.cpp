@@ -2,7 +2,7 @@
 
 void Logger::addLog(int curTime, int pid, int qid){
 
-    if (!Logs.empty() && Logs.back().pid == pid )
+    if (!Logs.empty() && Logs.back().pid == pid && Logs.back().qid == qid )
     {
         Logs.back().end = curTime + 1;
     }
