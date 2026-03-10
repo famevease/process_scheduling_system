@@ -36,29 +36,30 @@ void runSimulation(std::vector<Queue>& queues, std::vector<Process>& allProcesse
 
 
         //Kiem tra queue Qidx co empty k va con timeslice k de chuyen qidx
-        if (queues[Qidx].processes.empty() || TSliceLeft <= 0 )
+        if (TSliceLeft <= 0 || queues[Qidx].processes.empty())
         {
-            // Kiem tra tien trinh o queue hien tai neu khong co thi di tim o cac queue khac
-            if (queues[Qidx].processes.empty()) {
+                //Chuyen tien trinh Qidx ngay lap tuc boi vi no da thoa dk de chuyen Queue la tslice || empty
+                Qidx = (Qidx + 1) % queues.size();
+
+                //Neu Queue moi chuyen sang rong thi no se nhay sang queue gan nhat khong rong
+                int countQueue = 0;
+                while (queues[Qidx].processes.empty() && countQueue < queues.size()) {
+                    Qidx = (Qidx + 1) % queues.size();
+                    countQueue++;
+                }
+
                 //Check neu tat ca queue trong thi la tg ranh va tang curTime++
                 if (AllQueuesEmpty(queues)) {
                     curTime++;
                     continue; 
                 }
-                //Tim queue gan nhat dang trong 
-                for (int i = 0; i < queues.size(); i++) {
-                    if (!queues[i].processes.empty()) {
-                        Qidx = i;
-                        break;
-                    }
+                else{
+                    //Chi lay timeslice khi da chuyen sang queue moi
+                    TSliceLeft = queues[Qidx].timeSlice;
+                    //SJF: Neu ma dang dung nhung het timeslice thi dat lai thanh false de tiep tuc sort moi
+                    //Tai vi co the co tien trinh moi vao Queue nay luc b dang het timesliced
+                    isBusy = false;
                 }
-            }
-                
-            //Neu da tim duoc queue Qidx thoa man thi lay timeslice cua cai do
-            TSliceLeft = queues[Qidx].timeSlice;          
-            //SJF: Neu ma dang dung nhung het timeslice thi dat lai thanh false de tiep tuc sort moi
-            //Tai vi co the co tien trinh moi vao Queue nay luc b dang het timesliced
-            isBusy = false;
         }
         
         //Tao bien cho code clean hon
@@ -86,6 +87,10 @@ void runSimulation(std::vector<Queue>& queues, std::vector<Process>& allProcesse
         p.remainingTime--;
         curTime++;
         TSliceLeft--;
+
+        //Sau khi curtime++ thi ktra de nap tiep 
+        loadNewProcesses(curTime, queues, allProcesses);
+
         //neu thoi gian cua process = 0 tuong duong voi done process do va se lam process moi
         if (p.remainingTime == 0)
         {
@@ -93,6 +98,7 @@ void runSimulation(std::vector<Queue>& queues, std::vector<Process>& allProcesse
             p.turnAroundTime = p.completionTime - p.arrivalTime;
             p.waitingTime = p.turnAroundTime - p.burstTime;
             countProcess++;
+
             allProcesses[p.pid-1] = p; //Cap nhat lai process da hoan thanh vao allProcesses de tinh toan sau nay
             removeCompletedProcesses(curQ);
             isBusy = false; //Dat thanh false SJF co the qua Pid ke tiep
