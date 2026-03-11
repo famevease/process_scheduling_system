@@ -11,7 +11,7 @@ bool AllQueuesEmpty(std::vector<Queue>& queues){
 void loadNewProcesses(const int& curTime, std::vector<Queue>& queues, std::vector<Process>& Processes) {
     for (auto &i : Processes) {
         if (i.arrivalTime == curTime && !i.isLoaded) {
-            //Truy cap vao queue roi pushback processes vao dung queue
+            // Truy cập vào queue rồi push process vào queue đó
             addProcessToQueue(i, queues);
             i.isLoaded = true;
         }
@@ -19,79 +19,75 @@ void loadNewProcesses(const int& curTime, std::vector<Queue>& queues, std::vecto
 }
 
 void runSimulation(std::vector<Queue>& queues, std::vector<Process>& allProcesses, Logger& logs){
-    //Dung chay khi so luong process da hoan thanh = total
+    //Dừng chạy khi số lượng process đã hoàn thành = total process
     int countProcess = 0;
     int curTime = 0;
     int Qidx = 0; //Q1,Q2,Q3
     int TotalProcess = allProcesses.size();
-    //Day la timeslide thay doi theo tung queue
+    //Timeslice còn lại của từng queue
     int TSliceLeft = 0;
-    bool isBusy = false; //Dung de phan biet policy srtn va sjf
+    bool isBusy = false; //Dùng để phân biệt SJF & SRTN
 
-    //Kiem tra dieu kien dung khi da hoan thanh tat ca cac process
+    //Kiểm tra điều kiện dừng
     while (countProcess < TotalProcess)
     {
-        //Nap cac process dua tren thoi gian arrivalTime moi giay curTime
+        //Nạp các process dựa trên thời gian arrivalTime mỗi giây curTime
         loadNewProcesses(curTime,queues,allProcesses);
 
-
-        //Kiem tra queue Qidx co empty k va con timeslice k de chuyen qidx
+        //Kiểm tra TS còn không và queue hiện tại có process nào không, nếu không thì chuyển sang queue tiếp theo
         if (TSliceLeft <= 0 || queues[Qidx].processes.empty())
         {
-                //Chuyen tien trinh Qidx ngay lap tuc boi vi no da thoa dk de chuyen Queue la tslice || empty
+                //Chuyển tiến trình Qidx ngay vì đã thỏa điều kiện chuyển Queue là tslice hết hoặc empty
                 Qidx = (Qidx + 1) % queues.size();
 
-                //Neu Queue moi chuyen sang rong thi no se nhay sang queue gan nhat khong rong
+                //Nếu queue mới chuyển sang rỗng thì tiếp tục chuyển sang queue tiếp theo
                 int countQueue = 0;
                 while (queues[Qidx].processes.empty() && countQueue < queues.size()) {
                     Qidx = (Qidx + 1) % queues.size();
                     countQueue++;
                 }
 
-                //Check neu tat ca queue trong thi la tg ranh va tang curTime++
+                //Check nếu tất cả queue trống thì tăng curTime và tiếp tục vòng lặp để load process mới vào queue
                 if (AllQueuesEmpty(queues)) {
                     curTime++;
                     continue; 
                 }
                 else{
-                    //Chi lay timeslice khi da chuyen sang queue moi
+                    //Chỉ lấy TS khi đã sang queue mới
                     TSliceLeft = queues[Qidx].timeSlice;
-                    //SJF: Neu ma dang dung nhung het timeslice thi dat lai thanh false de tiep tuc sort moi
-                    //Tai vi co the co tien trinh moi vao Queue nay luc b dang het timesliced
+                    //SJF: Nếu mà đang dùng nhưng hết timeslice thì đặt lại thành false để tiếp tục sort mới
+                    //Tại vì có thể có tiến trình mới vào Queue này lúc đang hết timeslice
                     isBusy = false;
                 }
         }
         
-        //Tao bien cho code clean hon
+        //Tạo biến để code clean
         Queue& curQ = queues[Qidx];
 
-        //kiem tra policy cua Qidx (hientai)
+        //Kiểm tra Policy của Qidx hiện tại
         if (queues[Qidx].policy == "SRTN"){
             sortProcessesBySRTN(curQ.processes);
         }
-        //Phai kiem tra process chay xong chx roi ms sort
+        //Kiểm tra process chạy xong chưa rồi mới sort
         else{
             if (!isBusy)
             {
                 sortProcessesBySJF(curQ.processes);
-                isBusy = true; // Khoa lai khong cho no sort den khi hoan thanh
+                isBusy = true; //Khóa lại không cho sort cho đến khi hoàn thành
             }
         }
 
-        //Tao chuong trinh bang ctrinh dung dau trong queue
+        //Tạo chương trình bằng chương trình đứng đầu trong queue
         Process& p = curQ.processes[0];
 
-        //Ghi lai tg de co the in ra output
+        //Ghi lại thời gian vào log
         logs.addLog(curTime,p.pid,p.queueId);
         
         p.remainingTime--;
         curTime++;
         TSliceLeft--;
 
-        //Sau khi curtime++ thi ktra de nap tiep 
-        loadNewProcesses(curTime, queues, allProcesses);
-
-        //neu thoi gian cua process = 0 tuong duong voi done process do va se lam process moi
+        //Khi process hoàn thành thì cập nhật các thông số cần thiết và xóa process đó khỏi queue
         if (p.remainingTime == 0)
         {
             p.completionTime = curTime;
@@ -99,10 +95,8 @@ void runSimulation(std::vector<Queue>& queues, std::vector<Process>& allProcesse
             p.waitingTime = p.turnAroundTime - p.burstTime;
             countProcess++;
 
-            allProcesses[p.pid-1] = p; //Cap nhat lai process da hoan thanh vao allProcesses de tinh toan sau nay
+            allProcesses[p.pid-1] = p; //Cập nhật lại process đã hoàn thành vào vector allProcess để in ra file cuối cùng
             removeCompletedProcesses(curQ);
-            isBusy = false; //Dat thanh false SJF co the qua Pid ke tiep
         }
-        
     }
 }

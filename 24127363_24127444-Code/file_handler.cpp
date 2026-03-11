@@ -20,8 +20,6 @@ void readFile(const std::string& filename, std::vector<Queue>& queues, std::vect
     while (file >> dummy) {
         Process process;
         file >> process.pid >> process.arrivalTime >> process.burstTime >> dummy >> process.queueId;
-        //Them dong nay boi vi khi khoi tao remainingtime dau tien (0 hoac rac) roi sau do moi cap nhap burst time nen no se khong
-        //tu dieu chinh remainingtime
         process.remainingTime = process.burstTime;
         processes.push_back(process);
     }
@@ -36,20 +34,20 @@ void writeOutput(const std::string& filename, const Logger& logger, const std::v
 
     file << "================== CPU SCHEDULING DIAGRAM ==================\n";
     file << "\n[Start - End]\tQueue\tProcess\n";
-    file << "--------------------------------------------------------------\n";
+    file << "------------------------------------------------------------\n";
     for (const auto& log : logger.Logs) {
-        file << "[" << log.start << " - " << log.end << "]\tQ" << log.qid << "\tP" << log.pid << "\n";
+        file << "[" << log.start << " - " << log.end << "]\t\t\tQ" << log.qid << "\t\tP" << log.pid << "\n";
     }
-    file << "\n================ PROCESS STATISTICS ================\n";
-    file << "\nProcess\tArrival\tBurst\tCompletion\tTurnaround\tWaiting\n";
-    file << "----------------------------------------------------------------------------------------------------------------------------\n";
+    file << "\n================ PROCESS STATISTICS ======================\n";
+    file << "\nProcess\t\tArrival\tBurst\tCompletion\tTurnaround\tWaiting\n";
+    file << "------------------------------------------------------------\n";
     for (const auto& process : processes) {
-        file << "P" << process.pid << "\t" << process.arrivalTime << "\t" << process.burstTime << "\t" 
-             << process.completionTime << "\t\t" << process.turnAroundTime << "\t\t" << process.waitingTime << "\n";
+        file << "P" << process.pid << "\t\t\t" << process.arrivalTime << "\t\t" << process.burstTime << "\t\t\t" 
+             << process.completionTime << "\t\t\t" << process.turnAroundTime << "\t\t\t" << process.waitingTime << "\n";
     }
-    file << "----------------------------------------------------------------------------------------------------------------------------\n";
+    file << "------------------------------------------------------------\n";
     file << "Average Turnaround Time: " << averageTurnAroundTime(processes) << "\n";
     file << "Average Waiting Time: " << averageWaitingTime(processes) << "\n";
-    file << "\n====================================================";
+    file << "\n============================================================";
     file.close();
 }

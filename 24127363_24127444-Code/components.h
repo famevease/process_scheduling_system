@@ -6,14 +6,14 @@
 
 
 struct Process{
-    int pid; //p1,p2,...
+    int pid; 
     int arrivalTime;
-    int burstTime; //tg can de hoan thanh
+    int burstTime; 
     int queueId;
 
-    int remainingTime = burstTime; //tg con lai de chay xong ct
-    int waitingTime = 0; //tg nam trong hang cho
-    int turnAroundTime = 0;     //tu luc vao den luc xong (complete - arrival)
+    int remainingTime; 
+    int waitingTime = 0; 
+    int turnAroundTime = 0;
     int completionTime = 0; 
 
     bool isLoaded = false;
@@ -25,7 +25,7 @@ struct Queue{
     std::string policy; // sjf & srtn
     std::vector<Process> processes = {};
 
-    //Tra ve dia chi cua chuong trinh dau tien trong hang doi
+    //Trả về process đầu tiên trong queue (process cần chạy)
     Process* getCurrentProcess() {
         if (processes.empty()) return nullptr;
         return &processes[0];

@@ -16,7 +16,7 @@ void Logger::printOutput(){
     std::cout << "\n==== CPU SCHEDULING DIAGRAM ====" << std::endl;
     
     
-    for (const auto& log : Logs) { // const de khong bi thay doi duoc
+    for (const auto& log : Logs) { 
         std::cout << "[" << log.start << "-" << log.end << "] "
                   << "Q" << log.qid << " "
                   << "P" << log.pid << std::endl;
